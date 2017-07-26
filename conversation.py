@@ -29,7 +29,7 @@ dictionary_size = 7000
 maxlen_input = 50
 
 vocabulary_file = 'vocabulary_movie'
-weights_file = 'my_model_weights20.h5'
+weights_file = '../my_model_weights20.h5'
 unknown_token = 'something'
 file_saved_context = 'saved_context'
 file_saved_answer = 'saved_answer'
@@ -134,8 +134,8 @@ ad = Adam(lr=0.00005)
 
 input_context = Input(shape=(maxlen_input,), dtype='int32', name='theContextText')
 input_answer = Input(shape=(maxlen_input,), dtype='int32', name='theAnswerTextUpToTheCurrentToken')
-LSTM_encoder = LSTM(sentence_embedding_size, init= 'lecun_uniform', name='EncodeContext')
-LSTM_decoder = LSTM(sentence_embedding_size, init= 'lecun_uniform', name='EncodeAnswerUpToTheCurrentToken')
+LSTM_encoder = LSTM(sentence_embedding_size, kernel_initializer= 'lecun_uniform', name='EncodeContext')
+LSTM_decoder = LSTM(sentence_embedding_size, kernel_initializer= 'lecun_uniform', name='EncodeAnswerUpToTheCurrentToken')
 if os.path.isfile(weights_file):
     Shared_Embedding = Embedding(output_dim=word_embedding_size, input_dim=dictionary_size, input_length=maxlen_input, name='Shared')
 else:
@@ -146,9 +146,9 @@ context_embedding = LSTM_encoder(word_embedding_context)
 word_embedding_answer = Shared_Embedding(input_answer)
 answer_embedding = LSTM_decoder(word_embedding_answer)
 
-merge_layer = merge([context_embedding, answer_embedding], mode='concat', concat_axis=1, name='concatenate the embeddings of the context and the answer up to current token')
-out = Dense(dictionary_size/2, activation="relu", name='relu activation')(merge_layer)
-out = Dense(dictionary_size, activation="softmax", name='likelihood of the current token using softmax activation')(out)
+merge_layer = merge([context_embedding, answer_embedding], mode='concat', concat_axis=1, name='ConcatenateTheEmbeddingsOfTheContextAndTheAnswerUpToCurrentToken')
+out = Dense(dictionary_size/2, activation="relu", name='reluActivation')(merge_layer)
+out = Dense(dictionary_size, activation="softmax", name='likelihoodOfTheCurrentTokenUsingSoftmaxActivation')(out)
 
 model = Model(input=[input_context, input_answer], output = [out])
 
