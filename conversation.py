@@ -132,10 +132,10 @@ print('Starting the model...')
 
 ad = Adam(lr=0.00005) 
 
-input_context = Input(shape=(maxlen_input,), dtype='int32', name='the context text')
-input_answer = Input(shape=(maxlen_input,), dtype='int32', name='the answer text up to the current token')
-LSTM_encoder = LSTM(sentence_embedding_size, init= 'lecun_uniform', name='Encode context')
-LSTM_decoder = LSTM(sentence_embedding_size, init= 'lecun_uniform', name='Encode answer up to the current token')
+input_context = Input(shape=(maxlen_input,), dtype='int32', name='theContextText')
+input_answer = Input(shape=(maxlen_input,), dtype='int32', name='theAnswerTextUpToTheCurrentToken')
+LSTM_encoder = LSTM(sentence_embedding_size, init= 'lecun_uniform', name='EncodeContext')
+LSTM_decoder = LSTM(sentence_embedding_size, init= 'lecun_uniform', name='EncodeAnswerUpToTheCurrentToken')
 if os.path.isfile(weights_file):
     Shared_Embedding = Embedding(output_dim=word_embedding_size, input_dim=dictionary_size, input_length=maxlen_input, name='Shared')
 else:
