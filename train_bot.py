@@ -3,7 +3,7 @@
 __author__ = 'Oswaldo Ludwig'
 __version__ = '1.01'
 
-from keras.layers import Input, Embedding, LSTM, Dense, RepeatVector, Bidirectional, Dropout, merge
+from keras.layers import Input, Embedding, LSTM, Dense, RepeatVector, Bidirectional, Dropout, merge, concatenate
 from keras.optimizers import Adam, SGD
 from keras.models import Model
 from keras.models import Sequential
@@ -19,7 +19,7 @@ import theano.tensor as T
 import os
 import pandas as pd
 import sys
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 word_embedding_size = 100
 sentence_embedding_size = 300
@@ -37,7 +37,7 @@ vocabulary_file = 'vocabulary_movie'
 questions_file = 'Padded_context'
 answers_file = 'Padded_answers'
 weights_file = 'my_model_weights20.h5'
-GLOVE_DIR = './glove.6B/'
+GLOVE_DIR = '../'
 
 early_stopping = EarlyStopping(monitor='val_loss', patience=Patience)
 
@@ -98,8 +98,8 @@ ad = Adam(lr=0.00005)
 
 input_context = Input(shape=(maxlen_input,), dtype='int32', name='input_context')
 input_answer = Input(shape=(maxlen_input,), dtype='int32', name='input_answer')
-LSTM_encoder = LSTM(sentence_embedding_size, init= 'lecun_uniform')
-LSTM_decoder = LSTM(sentence_embedding_size, init= 'lecun_uniform')
+LSTM_encoder = LSTM(sentence_embedding_size, kernel_initializer= 'lecun_uniform')
+LSTM_decoder = LSTM(sentence_embedding_size, kernel_initializer= 'lecun_uniform')
 if os.path.isfile(weights_file):
     Shared_Embedding = Embedding(output_dim=word_embedding_size, input_dim=dictionary_size, input_length=maxlen_input)
 else:
@@ -110,8 +110,8 @@ context_embedding = LSTM_encoder(word_embedding_context)
 word_embedding_answer = Shared_Embedding(input_answer)
 answer_embedding = LSTM_decoder(word_embedding_answer)
 
-merge_layer = merge([context_embedding, answer_embedding], mode='concat', concat_axis=1)
-out = Dense(dictionary_size/2, activation="relu")(merge_layer)
+merge_layer = concatenate([context_embedding, answer_embedding], axis=1)
+out = Dense(int(dictionary_size/2), activation="relu")(merge_layer)
 out = Dense(dictionary_size, activation="softmax")(out)
 
 model = Model(input=[input_context, input_answer], output = [out])
