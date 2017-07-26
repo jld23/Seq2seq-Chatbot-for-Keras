@@ -98,8 +98,8 @@ ad = Adam(lr=0.00005)
 
 input_context = Input(shape=(maxlen_input,), dtype='int32', name='input_context')
 input_answer = Input(shape=(maxlen_input,), dtype='int32', name='input_answer')
-LSTM_encoder = LSTM(sentence_embedding_size, init= 'lecun_uniform')
-LSTM_decoder = LSTM(sentence_embedding_size, init= 'lecun_uniform')
+LSTM_encoder = LSTM(sentence_embedding_size, kernel_initializer= 'lecun_uniform')
+LSTM_decoder = LSTM(sentence_embedding_size, kernel_initializer= 'lecun_uniform')
 if os.path.isfile(weights_file):
     Shared_Embedding = Embedding(output_dim=word_embedding_size, input_dim=dictionary_size, input_length=maxlen_input)
 else:
