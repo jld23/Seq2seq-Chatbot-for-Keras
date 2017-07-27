@@ -20,7 +20,7 @@ import re
     
 questions_file = 'context'
 answers_file = 'answers'
-vocabulary_file = 'vocabulary_movie'
+vocabulary_file = '../saschat_final.txt'
 padded_questions_file = 'Padded_context'
 padded_answers_file = 'Padded_answers'
 unknown_token = 'something'
@@ -48,16 +48,16 @@ paragraphs_q = [p for p in questions.split('\n') ]
 tokenized_answers = [p.split() for p in paragraphs_a]
 tokenized_questions = [p.split() for p in paragraphs_q]
 
-### Counting the word frequencies:
-##word_freq = nltk.FreqDist(itertools.chain(tokenized_text))
-##print ("Found %d unique words tokens." % len(word_freq.items()))
-##
-### Getting the most common words and build index_to_word and word_to_index vectors:
-##vocab = word_freq.most_common(vocabulary_size-1)
-##
-### Saving vocabulary:
-##with open(vocabulary_file, 'w') as v:
-##    pickle.dump(vocab, v)
+# Counting the word frequencies:
+word_freq = nltk.FreqDist(itertools.chain(tokenized_text))
+print ("Found %d unique words tokens." % len(word_freq.items()))
+
+# Getting the most common words and build index_to_word and word_to_index vectors:
+vocab = word_freq.most_common(vocabulary_size-1)
+
+# Saving vocabulary:
+with open(vocabulary_file, 'w') as v:
+    pickle.dump(vocab, v)
 
 vocab = pickle.load(open(vocabulary_file, 'rb'))
 

@@ -13,7 +13,7 @@ from keras.preprocessing import sequence
 
 import keras.backend as K
 import numpy as np
-np.random.seed(1234)  # for reproducibility
+np.random.seed(9878)  # for reproducibility
 import cPickle
 import theano.tensor as T
 import os
@@ -23,7 +23,7 @@ import sys
 
 word_embedding_size = 100
 sentence_embedding_size = 300
-dictionary_size = 7000
+dictionary_size = 5000
 maxlen_input = 50
 maxlen_output = 50
 num_subsets = 1
@@ -33,10 +33,10 @@ Patience = 0
 dropout = .25
 n_test = 100
 
-vocabulary_file = 'vocabulary_movie'
+vocabulary_file = '../saschat_final.txt'
 questions_file = 'Padded_context'
 answers_file = 'Padded_answers'
-weights_file = 'my_model_weights20.h5'
+weights_file = ''
 GLOVE_DIR = '../'
 
 early_stopping = EarlyStopping(monitor='val_loss', patience=Patience)
@@ -62,7 +62,7 @@ def print_result(input):
 
 
 # **********************************************************************
-# Reading a pre-trained word embedding and addapting to our vocabulary:
+# Reading a pre-trained word embedding and adapting to our vocabulary:
 # **********************************************************************
 
 embeddings_index = {}
@@ -85,7 +85,7 @@ i = 0
 for word in vocabulary:
     embedding_vector = embeddings_index.get(word[0])
     
-    if embedding_vector is not None:
+    if embedding_vector is not None and i < dictionary_size:
         # words not found in embedding index will be all-zeros.
         embedding_matrix[i] = embedding_vector
     i += 1
@@ -154,7 +154,7 @@ for m in range(Epochs):
         s = q2.shape
         count = 0
         for i, sent in enumerate(a[n:n+step]):
-            l = np.where(sent==3)  #  the position od the symbol EOS
+            l = np.where(sent==0)  #  the position of the symbol EOS
             limit = l[0][0]
             count += limit + 1
             
@@ -168,10 +168,10 @@ for m in range(Epochs):
             ans_partial = np.zeros((1,maxlen_input))
             
             # Loop over the positions of the current target output (the current output sequence):
-            l = np.where(sent==3)  #  the position of the symbol EOS
+            l = np.where(sent==0)  #  the position of the symbol EOS
             limit = l[0][0]
 
-            for k in range(1,limit+1):
+            for k in range(1,min(limit+1,dictionary_size)):
                 # Mapping the target output (the next output word) for one-hot codding:
                 y = np.zeros((1, dictionary_size))
                 y[0, sent[k]] = 1
