@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 
 __author__ = 'Oswaldo Ludwig'
 __version__ = '1.01'
 
 import numpy as np
-np.random.seed(1234)  # for reproducibility
+np.random.seed(9878)  # for reproducibility
 import pandas as pd
 import os
 import csv
@@ -18,14 +17,14 @@ from scipy import sparse, io
 from numpy.random import permutation
 import re
     
-questions_file = 'context'
-answers_file = 'answers'
-vocabulary_file = '../saschat_final.txt'
-padded_questions_file = 'Padded_context'
-padded_answers_file = 'Padded_answers'
+questions_file = '/chatbot/Seq2seq-Chatbot-for-Keras/context'
+answers_file = '/chatbot/Seq2seq-Chatbot-for-Keras/answers'
+vocabulary_file = '/chatbot/saschat_vocab'
+padded_questions_file = '/chatbot/Seq2seq-Chatbot-for-Keras/Padded_context'
+padded_answers_file = '/chatbot/Seq2seq-Chatbot-for-Keras/Padded_answers'
 unknown_token = 'something'
 
-vocabulary_size = 7000
+vocabulary_size = 12000
 max_features = vocabulary_size
 maxlen_input = 50
 maxlen_output = 50  # cut texts after this number of words
@@ -37,7 +36,7 @@ print ("Reading the answer data...")
 a = open(answers_file, 'r')
 answers = a.read()
 all = answers + questions
-print ("Tokenazing the answers...")
+print ("Tokenizing the answers...")
 paragraphs_a = [p for p in answers.split('\n')]
 paragraphs_b = [p for p in all.split('\n')]
 paragraphs_a = ['BOS '+p+' EOS' for p in paragraphs_a]

@@ -5,19 +5,19 @@ __version__ = '1.01'
 
 import numpy as np
 
-text = open('dialog_simple', 'r')
-q = open('context', 'w')
-a = open('answers', 'w')
+text = open('/chatbot/saschat_final.txt', 'r')
+#text = open('/chatbot/saschat_sample.txt', 'r')
+
+q = open('/chatbot/Seq2seq-Chatbot-for-Keras/context', 'w')
+a = open('/chatbot/Seq2seq-Chatbot-for-Keras/answers', 'w')
 pre_pre_previous_raw=''
 pre_previous_raw=''
 previous_raw=''
 person = ' '
 previous_person=' '
-
 l1 = ['won’t','won\'t','wouldn’t','wouldn\'t','’m', '’re', '’ve', '’ll', '’s','’d', 'n’t', '\'m', '\'re', '\'ve', '\'ll', '\'s', '\'d', 'can\'t', 'n\'t', 'B: ', 'A: ', ',', ';', '.', '?', '!', ':', '. ?', ',   .', '. ,', 'EOS', 'BOS', 'eos', 'bos']
 l2 = ['will not','will not','would not','would not',' am', ' are', ' have', ' will', ' is', ' had', ' not', ' am', ' are', ' have', ' will', ' is', ' had', 'can not', ' not', '', '', ' ,', ' ;', ' .', ' ?', ' !', ' :', '? ', '.', ',', '', '', '', '']
 l3 = ['-', '_', ' *', ' /', '* ', '/ ', '\"', ' \\"', '\\ ', '--', '...', '. . .']
-
 for i, raw_word in enumerate(text):
     pos = raw_word.find('+++$+++')
 
